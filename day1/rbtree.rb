@@ -134,7 +134,6 @@ class RBTree
   end
 end
 
-=begin
 t = RBTree.new(11)
 puts t.stringify
 t.add(2)
@@ -157,4 +156,3 @@ puts t.stringify
 puts "here comes the rotations"
 t.add(4)
 puts t.stringify
-=end
