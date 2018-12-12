@@ -8,19 +8,19 @@ class Node
     @parent = parent
     @children_count = num_children
     @metadata_count = num_metadata
-    @children = Array.new
-    @value == nil
+    @children = []
+    @value = nil
   end
 
   def value
-    return @value unless @value == nil
-    if @children.empty? then
+    return @value unless @value.nil?
+    if @children.empty?
       @value = @metadata.reduce(0, :+)
     else
       @value = 0
       @metadata.each do |md|
-        if (md - 1) < @children.length then
-          @value += @children[md-1].value
+        if (md - 1) < @children.length
+          @value += @children[md - 1].value
         end
       end
     end
@@ -28,18 +28,18 @@ class Node
   end
 end
 
-nodes = Array.new
-data = File.read('input').split.map { |x| x.to_i }
+nodes = []
+data = File.read("input").split.map { |x| x.to_i }
 current_node = Node.new(nil, data.shift, data.shift)
 nodes.push(current_node)
-until data.empty? do
-  if current_node.children.length == current_node.children_count then
+until data.empty?
+  if current_node.children.length == current_node.children_count
     current_node.metadata = data.shift(current_node.metadata_count)
     current_node = current_node.parent
-  else 
+  else
     current_node = Node.new(current_node, data.shift, data.shift)
     current_node.parent.children.push(current_node)
-    nodes.push(current_node) 
+    nodes.push(current_node)
   end
 end
 
