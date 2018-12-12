@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-
 class Claim
   attr_reader :id, :left, :top, :width, :height
 
@@ -8,9 +7,9 @@ class Claim
     @id, @left, @top, @width, @height = line.scan(/\d+/).map { |i| i.to_i }
   end
 
-  def get_ranges
-    ranges = Array.new
-    (@top...@top+@height).each do |y|
+  def ranges
+    ranges = []
+    (@top...@top + @height).each do |y|
       ranges.push((@left + (y * 1000)...@left + @width + (y * 1000)))
     end
     ranges
@@ -21,25 +20,25 @@ class Claim
   end
 end
 
-claims = Array.new
-File.open('input').each do |line|
-  claims.push(Claim.new(line))
+claims = []
+File.open("input").each do |line|
+  claims << Claim.new(line)
 end
 
-cloth = Array.new(1000*1000, nil)
-clean_claims = Hash.new
+cloth = Array.new(1000 * 1000, nil)
+clean_claims = {}
 claims.each do |claim|
   clean_claims[claim.id] = claim
 end
-while clean_claims.keys.length > 1 do
+while clean_claims.keys.length > 1
   clean_claims.values.each do |claim|
-    claim.get_ranges.each do |range|
+    claim.ranges.each do |range|
       range.each do |spot|
         id = cloth[spot]
-        if id == nil or id == claim.id then
+        if id.nil? || (id == claim.id)
           cloth[spot] = claim.id
         else
-          clean_claims = clean_claims.reject { |k,v| k == id or k == claim.id}
+          clean_claims = clean_claims.reject { |k, v| (k == id) || (k == claim.id)}
         end
       end
     end
